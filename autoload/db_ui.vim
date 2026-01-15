@@ -413,98 +413,94 @@ function! s:dbui.connect(db) abort
       call db_ui#notifications#info('Connecting to ssh for '.a:db.name.'...')
       call system('runproddb')
     endif
-    if a:db.name == "uat-uni"
-      call db_ui#notifications#info('Connecting to ssh for '.a:db.name.'...')
-        call system('tunnels uat-uni')
-    endif
-    if a:db.name == "uat-identity"
-      call db_ui#notifications#info('Connecting to ssh for '.a:db.name.'...')
-        call system('tunnels uat-identity')
-    endif
-    if a:db.name == "uat-product"
-      call db_ui#notifications#info('Connecting to ssh for '.a:db.name.'...')
-        call system('tunnels uat-product')
-    endif
-    if a:db.name == "uat-delivery"
-      call db_ui#notifications#info('Connecting to ssh for '.a:db.name.'...')
-        call system('tunnels uat-delivery')
-    endif
-    if a:db.name == "dev-uni"
-      call db_ui#notifications#info('Connecting to ssh for '.a:db.name.'...')
-        call system('tunnels dev-uni')
-    endif
-    if a:db.name == "dev-product"
-      call db_ui#notifications#info('Connecting to ssh for '.a:db.name.'...')
-        call system('tunnels dev-product')
-    endif
-    if a:db.name == "dev-delivery"
-      call db_ui#notifications#info('Connecting to ssh for '.a:db.name.'...')
-        call system('tunnels dev-delivery')
-    endif
-    if a:db.name == "dev-identity"
-      call db_ui#notifications#info('Connecting to ssh for '.a:db.name.'...')
-        call system('tunnels dev-identity')
-    endif
-    if a:db.name == "dev-adopt"
-      call db_ui#notifications#info('Connecting to ssh for '.a:db.name.'...')
-        call system('tunnels dev-adopt')
-    endif
-    if a:db.name == "dev-partner"
-      call db_ui#notifications#info('Connecting to ssh for '.a:db.name.'...')
-        call system('tunnels dev-partner')
-    endif
-    if a:db.name == "dev-orders"
-      call db_ui#notifications#info('Connecting to ssh for '.a:db.name.'...')
-        call system('tunnels dev-orders')
-    endif
-    if a:db.name == "uat-orders"
-      call db_ui#notifications#info('Connecting to ssh for '.a:db.name.'...')
-        call system('tunnels uat-orders')
-    endif
-    if a:db.name == "prod-partner-read" || a:db.name == "prod-partner"
-      call db_ui#notifications#info('Connecting to ssh for '.a:db.name.'...')
-        call system('tunnels partner')
-    endif
-    if a:db.name == "prod-billing-read-write" || a:db.name == "prod-billing"
-      call db_ui#notifications#info('Connecting to ssh for '.a:db.name.'...')
-        call system('tunnels billing')
-    endif
-    if a:db.name == 'prod-identity-read' || a:db.name == 'prod-identity'
-      call db_ui#notifications#info('Connecting to ssh for '.a:db.name.'...')
-        call system('tunnels identity')
-    endif
-    if a:db.name == 'prod-adopt-read' || a:db.name == 'prod-adopt'
-      call db_ui#notifications#info('Connecting to ssh for '.a:db.name.'...')
-        call system('tunnels adopt')
-    endif
-    if a:db.name == 'prod-product-read' || a:db.name == 'prod-product'
-      call db_ui#notifications#info('Connecting to ssh for '.a:db.name.'...')
-        call system('tunnels product')
-    endif
-    if a:db.name == 'prod-delivery-read' || a:db.name == 'prod-delivery'
-      call db_ui#notifications#info('Connecting to ssh for '.a:db.name.'...')
-        call system('tunnels delivery')
-    endif
-    if a:db.name == 'prod-uni-read' || a:db.name == 'prod-uni'
-      call db_ui#notifications#info('Connecting to ssh for '.a:db.name.'...')
-        call system('tunnels university')
-    endif
-    if a:db.name == 'prod-orders'
-      call db_ui#notifications#info('Connecting to ssh for '.a:db.name.'...')
-        call system('tunnels orders')
-    endif
-    if a:db.name == 'prod-partner'
-      call db_ui#notifications#info('Connecting to ssh for '.a:db.name.'...')
-        call system('tunnels partner')
-    endif
-    if a:db.name == 'REDSHIFT'
-      call db_ui#notifications#info('Connecting to ssh for '.a:db.name.'...')
-        call system('tunnels redshift')
-    endif
-
-
-
-
+    " if a:db.name == "uat-uni"
+    "   call db_ui#notifications#info('Connecting to ssh for '.a:db.name.'...')
+    "     call system('tunnels uat-uni')
+    " endif
+    " if a:db.name == "uat-identity"
+    "   call db_ui#notifications#info('Connecting to ssh for '.a:db.name.'...')
+    "     call system('tunnels uat-identity')
+    " endif
+    " if a:db.name == "uat-product"
+    "   call db_ui#notifications#info('Connecting to ssh for '.a:db.name.'...')
+    "     call system('tunnels uat-product')
+    " endif
+    " if a:db.name == "uat-delivery"
+    "   call db_ui#notifications#info('Connecting to ssh for '.a:db.name.'...')
+    "     call system('tunnels uat-delivery')
+    " endif
+    " if a:db.name == "dev-uni"
+    "   call db_ui#notifications#info('Connecting to ssh for '.a:db.name.'...')
+    "     call system('tunnels dev-uni')
+    " endif
+    " if a:db.name == "dev-product"
+    "   call db_ui#notifications#info('Connecting to ssh for '.a:db.name.'...')
+    "     call system('tunnels dev-product')
+    " endif
+    " if a:db.name == "dev-delivery"
+    "   call db_ui#notifications#info('Connecting to ssh for '.a:db.name.'...')
+    "     call system('tunnels dev-delivery')
+    " endif
+    " if a:db.name == "dev-identity"
+    "   call db_ui#notifications#info('Connecting to ssh for '.a:db.name.'...')
+    "     call system('tunnels dev-identity')
+    " endif
+    " if a:db.name == "dev-adopt"
+    "   call db_ui#notifications#info('Connecting to ssh for '.a:db.name.'...')
+    "     call system('tunnels dev-adopt')
+    " endif
+    " if a:db.name == "dev-partner"
+    "   call db_ui#notifications#info('Connecting to ssh for '.a:db.name.'...')
+    "     call system('tunnels dev-partner')
+    " endif
+    " if a:db.name == "dev-orders"
+    "   call db_ui#notifications#info('Connecting to ssh for '.a:db.name.'...')
+    "     call system('tunnels dev-orders')
+    " endif
+    " if a:db.name == "uat-orders"
+    "   call db_ui#notifications#info('Connecting to ssh for '.a:db.name.'...')
+    "     call system('tunnels uat-orders')
+    " endif
+    " if a:db.name == "prod-partner-read" || a:db.name == "prod-partner"
+    "   call db_ui#notifications#info('Connecting to ssh for '.a:db.name.'...')
+    "     call system('tunnels partner')
+    " endif
+    " if a:db.name == "prod-billing-read-write" || a:db.name == "prod-billing"
+    "   call db_ui#notifications#info('Connecting to ssh for '.a:db.name.'...')
+    "     call system('tunnels billing')
+    " endif
+    " if a:db.name == 'prod-identity-read' || a:db.name == 'prod-identity'
+    "   call db_ui#notifications#info('Connecting to ssh for '.a:db.name.'...')
+    "     call system('tunnels identity')
+    " endif
+    " if a:db.name == 'prod-adopt-read' || a:db.name == 'prod-adopt'
+    "   call db_ui#notifications#info('Connecting to ssh for '.a:db.name.'...')
+    "     call system('tunnels adopt')
+    " endif
+    " if a:db.name == 'prod-product-read' || a:db.name == 'prod-product'
+    "   call db_ui#notifications#info('Connecting to ssh for '.a:db.name.'...')
+    "     call system('tunnels product')
+    " endif
+    " if a:db.name == 'prod-delivery-read' || a:db.name == 'prod-delivery'
+    "   call db_ui#notifications#info('Connecting to ssh for '.a:db.name.'...')
+    "     call system('tunnels delivery')
+    " endif
+    " if a:db.name == 'prod-uni-read' || a:db.name == 'prod-uni'
+    "   call db_ui#notifications#info('Connecting to ssh for '.a:db.name.'...')
+    "     call system('tunnels university')
+    " endif
+    " if a:db.name == 'prod-orders'
+    "   call db_ui#notifications#info('Connecting to ssh for '.a:db.name.'...')
+    "     call system('tunnels orders')
+    " endif
+    " if a:db.name == 'prod-partner'
+    "   call db_ui#notifications#info('Connecting to ssh for '.a:db.name.'...')
+    "     call system('tunnels partner')
+    " endif
+    " if a:db.name == 'REDSHIFT'
+    "   call db_ui#notifications#info('Connecting to ssh for '.a:db.name.'...')
+    "     call system('tunnels redshift')
+    " endif
     let a:db.conn = db#connect(a:db.url)
     let a:db.conn_error = ''
     call self.populate_schema_info(a:db)
