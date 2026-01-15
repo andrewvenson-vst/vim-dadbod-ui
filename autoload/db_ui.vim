@@ -407,12 +407,18 @@ function! s:dbui.connect(db) abort
     "
     if a:db.name == "bc_dev"
       call db_ui#notifications#info('Connecting to ssh for '.a:db.name.'...')
-      call system('rundevdb &')
+      let l:output = system('rundevdb &')
+      let l:exit_code = v:shell_error
+      echom 'rundevdb output: ' . l:output
+      echom 'rundevdb exit code: ' . l:exit_code
       sleep 3
     endif
     if a:db.name == "bc_prod"
       call db_ui#notifications#info('Connecting to ssh for '.a:db.name.'...')
-      call system('runproddb &')
+      let l:output = system('runproddb &')
+      let l:exit_code = v:shell_error
+      echom 'runproddb output: ' . l:output
+      echom 'runproddb exit code: ' . l:exit_code
       sleep 3
     endif
     if a:db.name == "uat-uni"
