@@ -407,11 +407,13 @@ function! s:dbui.connect(db) abort
     "
     if a:db.name == "bc_dev"
       call db_ui#notifications#info('Connecting to ssh for '.a:db.name.'...')
-      call system('rundevdb')
+      call system('rundevdb &')
+      sleep 3
     endif
     if a:db.name == "bc_prod"
       call db_ui#notifications#info('Connecting to ssh for '.a:db.name.'...')
-        call system('runproddb')
+      call system('runproddb &')
+      sleep 3
     endif
     if a:db.name == "uat-uni"
       call db_ui#notifications#info('Connecting to ssh for '.a:db.name.'...')
