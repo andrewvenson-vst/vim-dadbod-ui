@@ -413,6 +413,10 @@ function! s:dbui.connect(db) abort
       call db_ui#notifications#info('Connecting to ssh for '.a:db.name.'...')
       call system('runproddb')
     endif
+    if a:db.name == "connect_dev"
+      call db_ui#notifications#info('Connecting to ssh for '.a:db.name.'...')
+      call system('runconnectdevdb')
+    endif
     " if a:db.name == "uat-uni"
     "   call db_ui#notifications#info('Connecting to ssh for '.a:db.name.'...')
     "     call system('tunnels uat-uni')
