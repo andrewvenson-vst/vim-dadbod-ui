@@ -75,6 +75,86 @@ function! db_ui#find_buffer() abort
   wincmd p
 endfunction
 
+" Same as db_ui#find_buffer(), but never opens/reveals the drawer.
+function! db_ui#find_buffer_silent() abort
+  call s:init()
+  if !len(s:dbui_instance.dbs_list)
+    return db_ui#notifications#error('No database entries found in DBUI.')
+  endif
+
+  if !exists('b:dbui_db_key_name')
+    let saved_query_db = s:dbui_instance.drawer.get_query().get_saved_query_db_name()
+    let db = s:get_db(saved_query_db)
+    if empty(db)
+      return db_ui#notifications#error('No database entries selected or found.')
+    endif
+    call s:dbui_instance.connect(db)
+    if empty(db.conn)
+      return
+    endif
+    call s:dbui_instance.drawer.populate(db)
+    if !s:dbui_instance.drawer.verify_connected(db)
+      return
+    endif
+    call db_ui#notifications#info('Assigned buffer to db '.db.name, {'delay': 10000 })
+    let b:dbui_db_key_name = db.key_name
+    let b:db = db.conn
+  endif
+
+  if !exists('b:dbui_db_key_name')
+    return db_ui#notifications#error('Unable to find in DBUI. Not a valid dbui query buffer.')
+  endif
+
+  let db = b:dbui_db_key_name
+  let bufname = bufname('%')
+
+  call s:dbui_instance.drawer.get_query().setup_buffer(s:dbui_instance.dbs[db], { 'existing_buffer': 1 }, bufname, 0)
+  if exists('*vim_dadbod_completion#fetch')
+    call vim_dadbod_completion#fetch(bufnr(''))
+  endif
+  let s:dbui_instance.dbs[db].expanded = 1
+  let s:dbui_instance.dbs[db].buffers.expanded = 1
+endfunction
+
+" Connect to a db by name and open (or reuse) a scratch query buffer for it
+" in the current window, without ever touching the drawer UI.
+function! db_ui#new_query_buffer(name) abort
+  call s:init()
+  let db = s:get_db(a:name)
+  if empty(db)
+    return db_ui#notifications#error('No database entry found for "'.a:name.'".')
+  endif
+
+  call s:dbui_instance.connect(db)
+  if empty(db.conn)
+    return
+  endif
+
+  call s:dbui_instance.drawer.populate(db)
+  if !s:dbui_instance.drawer.verify_connected(db)
+    return
+  endif
+
+  let query = s:dbui_instance.drawer.get_query()
+  let is_existing = 0
+  if !empty(db.buffers.list)
+    let buffer_name = db.buffers.list[0]
+    let is_existing = 1
+  else
+    let buffer_name = query.generate_buffer_name(db, { 'schema': '', 'table': '', 'label': '', 'filetype': db.filetype })
+  endif
+
+  execute 'edit '.fnameescape(buffer_name)
+  call query.setup_buffer(db, { 'existing_buffer': is_existing }, buffer_name, 0)
+
+  if exists('*vim_dadbod_completion#fetch')
+    call vim_dadbod_completion#fetch(bufnr(''))
+  endif
+
+  let db.expanded = 1
+  let db.buffers.expanded = 1
+endfunction
+
 function! db_ui#rename_buffer() abort
   call s:init()
   return s:dbui_instance.drawer.rename_buffer(bufname('%'), get(b:, 'dbui_db_key_name'), 0)

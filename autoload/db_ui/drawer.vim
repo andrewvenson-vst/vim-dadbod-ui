@@ -555,6 +555,27 @@ function! s:drawer.delete_line() abort
   call self.render()
 endfunction
 
+" Returns 1 if the db has a real, working connection (tables/schemas were
+" actually listed). Returns 0 and surfaces an error + resets conn if the
+" listing came back empty because of a genuine failure (not just a
+" legitimately empty schema).
+function! s:drawer.verify_connected(db) abort
+  let has_tables = !empty(a:db.tables.list) || (a:db.schema_support && !empty(a:db.schemas.list))
+  if has_tables
+    return 1
+  endif
+
+  let last_error = db#last_error()
+  if empty(last_error)
+    return 1
+  endif
+
+  let a:db.conn = ''
+  let a:db.conn_error = 'Failed to list tables: '.join(get(last_error, 'output', []), ' ')
+  call db_ui#notifications#error('Error listing tables for '.a:db.name.': '.a:db.conn_error, {'width': 80 })
+  return 0
+endfunction
+
 function! s:drawer.toggle_db(db) abort
   if !a:db.expanded
     return a:db
@@ -566,6 +587,7 @@ function! s:drawer.toggle_db(db) abort
 
   if !empty(a:db.conn)
     call self.populate(a:db)
+    call self.verify_connected(a:db)
   endif
 endfunction
 
