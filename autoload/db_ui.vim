@@ -407,23 +407,23 @@ function! s:dbui.connect(db) abort
     "
     if a:db.name == "bc_dev"
       call db_ui#notifications#info('Connecting to ssh for '.a:db.name.'...')
-      call system('rundevdb')
+      call system('rundb launch dev')
     endif
     if a:db.name == "ns_dev"
       call db_ui#notifications#info('Connecting to ssh for '.a:db.name.'...')
-      call system('rundevdb')
+      call system('rundb launch dev')
     endif
     if a:db.name == "bc_prod"
       call db_ui#notifications#info('Connecting to ssh for '.a:db.name.'...')
-      call system('runproddb')
+      call system('rundb launch prod')
     endif
     if a:db.name == "connect_dev"
       call db_ui#notifications#info('Connecting to ssh for '.a:db.name.'...')
-      call system('runconnectdevdb')
+      call system('rundb verba dev')
     endif
     if a:db.name == "connect_prod"
       call db_ui#notifications#info('Connecting to ssh for '.a:db.name.'...')
-      call system('runconnectproddb')
+      call system('rundb verba prod')
     endif
     " if a:db.name == "uat-uni"
     "   call db_ui#notifications#info('Connecting to ssh for '.a:db.name.'...')
