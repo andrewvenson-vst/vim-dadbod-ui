@@ -131,6 +131,79 @@ function! db_ui#dbout#yank_header() abort
   call setreg(v:register, csv_columns)
 endfunction
 
+function! db_ui#dbout#export_csv(...) abort
+  let parsed = db#url#parse(db_ui#resolve(b:db))
+  let scheme = db_ui#schemas#get(parsed.scheme)
+  if empty(scheme) || !has_key(scheme, 'cell_line_pattern')
+    return db_ui#notifications#error('CSV export not supported for '.parsed.scheme.' scheme.')
+  endif
+
+  let cell_line_number = s:get_cell_line_number(scheme)
+  let bounds = s:column_bounds(getline(cell_line_number))
+  if empty(bounds)
+    return db_ui#notifications#error('No results table found to export.')
+  endif
+
+  let csv_lines = [s:csv_row(getline(cell_line_number - 1), bounds)]
+  let lnum = cell_line_number + 1
+  let last = line('$')
+  while lnum <= last
+    let line = getline(lnum)
+    if line =~# '^[+-][+-]*$' || line !~# '|'
+      break
+    endif
+    call add(csv_lines, s:csv_row(line, bounds))
+    let lnum += 1
+  endwhile
+
+  let default_path = fnamemodify(bufname('%'), ':p:r').'.csv'
+  let path = a:0 > 0 && !empty(a:1) ? a:1 : input('Export CSV to: ', default_path, 'file')
+  if empty(path)
+    return db_ui#notifications#info('CSV export cancelled.')
+  endif
+
+  call writefile(csv_lines, fnamemodify(path, ':p'))
+  return db_ui#notifications#info('Exported '.(len(csv_lines) - 1).' rows to '.fnamemodify(path, ':p'))
+endfunction
+
+" Splits a '+---+---+' / '----+-----' header separator line into
+" [from, to] byte-range pairs, one per column, using the '+' positions
+" as boundaries.
+function! s:column_bounds(sep_line) abort
+  let bounds = []
+  let start = 0
+  let i = 0
+  let len = strlen(a:sep_line)
+  while i < len
+    if a:sep_line[i] ==# '+'
+      if i > start
+        call add(bounds, [start, i - 1])
+      endif
+      let start = i + 1
+    endif
+    let i += 1
+  endwhile
+  if start < len
+    call add(bounds, [start, len - 1])
+  endif
+  return bounds
+endfunction
+
+function! s:csv_field(value) abort
+  if a:value =~# '[",]'
+    return '"'.substitute(a:value, '"', '""', 'g').'"'
+  endif
+  return a:value
+endfunction
+
+function! s:csv_row(line, bounds) abort
+  let cells = []
+  for [from, to] in a:bounds
+    call add(cells, s:csv_field(trim(strpart(a:line, from, to - from + 1))))
+  endfor
+  return join(cells, ',')
+endfunction
+
 function! s:get_cell_range(cell_line_number, curpos, scheme) abort
   if get(a:scheme, 'has_virtual_results', v:false)
     return s:get_virtual_cell_range(a:cell_line_number, a:curpos)
